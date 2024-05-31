@@ -1,0 +1,7 @@
+{
+    "prestamo": {
+        "monto": 11000,
+        "plazo": 12,
+        "aporte_inicial": 110
+    }
+}
