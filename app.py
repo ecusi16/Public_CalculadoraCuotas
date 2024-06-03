@@ -20,7 +20,9 @@ def index():
         print(cuota_mensual)
         print(aporte_inicial)
         
-        return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles)
+        return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles, \
+                           tasa_interes=tasa_interes, monto=monto, \
+                           plazo=plazo, aporte_inicial=aporte_inicial)
     
     return render_template('index.html', cuota_mensual=cuota_mensual, \
                            detalles=detalles, \

@@ -50,12 +50,27 @@
         input[type="submit"]:hover {
             background: #0056b3;
         }
+        input[readonly] {
+            background-color: #e9ecef;
+            opacity: 0.7;
+        }
         details {
             margin-top: 20px;
         }
         details[open] summary {
             cursor: pointer;
             font-weight: bold;
+        }
+        .callout {
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-left-width: 5px;
+            border-radius: 3px;
+        }
+        .callout-primary {
+            border-left-color: #007bff;
+            background-color: #f0f8ff;
         }
     </style>
 </head>
@@ -86,15 +101,10 @@
             </div>
             <div class="col-md-6"> <!-- result-container">-->
                 {% if cuota_mensual is not none %}
+                
                     <h2>Resultado</h2>
-                    <details>
-                        <summary>Detalles del prestamo</summary>
-                        <p>Monto del préstamo: ${{ monto }}</p>
-                        <p>Plazo en meses: ${{ plazo }}</p>
-                        <p>Aporte inicial: ${{ aporte_inicial }}</p>
-                        <p>Tasa de interés anual (%): ${{ tasa_interes }}</p>
-                    </details>
-                    <p>La cuota mensual total es: ${{ cuota_mensual }}</p>
+                    <div class="callout callout-primary">
+                    <h5>La cuota mensual total es: ${{ cuota_mensual }}</h5>
                     <details>
                         <summary>Detalles de la cuota</summary>
                         <p>Cuota k+i: ${{ detalles['Cuota k+i'] }}</p>
@@ -102,6 +112,14 @@
                         <p>Cuota Balon: ${{ detalles['Cuota Balon'] }}</p>
                     </details>
 
+                    <details>
+                        <summary>Detalles del préstamo</summary>
+                        <p>Monto del préstamo: ${{ monto }}</p>
+                        <p>Plazo en meses: {{ plazo }}</p>
+                        <p>Aporte inicial: ${{ aporte_inicial }}</p>
+                        <p>Tasa de interés anual (%): {{ tasa_interes }}</p>
+                    </details>
+                </div>
                     
                 {% endif %}
             </div>
