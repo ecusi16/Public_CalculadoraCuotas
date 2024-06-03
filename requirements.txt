@@ -2,3 +2,4 @@ numpy_financial
 
 streamlit
 Flask
+gunicorn
