@@ -37,10 +37,9 @@ def obtener_detalles_cuotas(monto, plazo, tasa_interes_anual=16, cuota_balon_por
     cuota_calculada, costo_adm_calculado, cuota_balon_calculado = calcular_cuota_mensual(monto, plazo, tasa_interes_anual, cuota_balon_porcentaje, \
                            aporte_inicial, aporte_inicial_porcentaje, \
                             seguro_porcentaje)
-    resultado = {"Cuota k+i": cuota_calculada,
-            "Costo Adm.": costo_adm_calculado,
-            "Cuota Balon": cuota_balon_calculado}
-    print(resultado)
+    resultado = {"Cuota k+i": round(cuota_calculada, 2),
+            "Costo Adm.": round(costo_adm_calculado, 2),
+            "Cuota Balon": round(cuota_balon_calculado, 2)}
     return resultado
 
 
@@ -52,6 +51,7 @@ def obtener_cuota_mensual_total(monto, plazo, tasa_interes_anual=16, cuota_balon
                            aporte_inicial, aporte_inicial_porcentaje, \
                             seguro_porcentaje)
     
-    return round(cuota_calculada + costo_adm_calculado + cuota_balon_calculado, 2), {"Cuota k+i": cuota_calculada,
-            "Costo Adm.": costo_adm_calculado,
-            "Cuota Balon": cuota_balon_calculado}
+    return round(cuota_calculada + costo_adm_calculado + cuota_balon_calculado, 2), \
+            {"Cuota k+i": round(cuota_calculada, 2),
+            "Costo Adm.": round(costo_adm_calculado, 2),
+            "Cuota Balon": round(cuota_balon_calculado, 2)}
