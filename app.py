@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from calculadora_cuotas import obtener_cuota_mensual_total
 
-app = Flask(__name__)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -21,5 +21,10 @@ def index():
     
     return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles, tasa_interes=tasa_interes)
 
-if __name__ == '__main__':
+def create_app():
+    app = Flask(__name__)
+    return app
+
+"""if __name__ == '__main__':
     app.run(debug=True)
+"""
