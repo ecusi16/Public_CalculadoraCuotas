@@ -87,6 +87,13 @@
             <div class="col-md-6"> <!-- result-container">-->
                 {% if cuota_mensual is not none %}
                     <h2>Resultado</h2>
+                    <details>
+                        <summary>Detalles del prestamo</summary>
+                        <p>Monto del préstamo: ${{ monto }}</p>
+                        <p>Plazo en meses: ${{ plazo }}</p>
+                        <p>Aporte inicial: ${{ aporte_inicial }}</p>
+                        <p>Tasa de interés anual (%): ${{ tasa_interes }}</p>
+                    </details>
                     <p>La cuota mensual total es: ${{ cuota_mensual }}</p>
                     <details>
                         <summary>Detalles de la cuota</summary>
@@ -94,6 +101,8 @@
                         <p>Costo Adm.: ${{ detalles['Costo Adm.'] }}</p>
                         <p>Cuota Balon: ${{ detalles['Cuota Balon'] }}</p>
                     </details>
+
+                    
                 {% endif %}
             </div>
         </div>
