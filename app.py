@@ -1,13 +1,16 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Blueprint
 from calculadora_cuotas import obtener_cuota_mensual_total
 
+main = Blueprint('main', __name__)
 
-
-@app.route('/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
 def index():
     cuota_mensual = None
     detalles = None
     tasa_interes = 16  # Tasa de interés predeterminada
+    monto = None
+    plazo = None
+    aporte_inicial = None
     if request.method == 'POST':
         monto = float(request.form['monto'])
         plazo = int(request.form['plazo'])
@@ -19,10 +22,15 @@ def index():
         
         return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles)
     
-    return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles, tasa_interes=tasa_interes)
+    return render_template('index.html', cuota_mensual=cuota_mensual, \
+                           detalles=detalles, \
+                           tasa_interes=tasa_interes, monto=monto, \
+                           plazo=plazo, aporte_inicial=aporte_inicial)
+
 
 def create_app():
     app = Flask(__name__)
+    app.register_blueprint(main)
     return app
 
 """if __name__ == '__main__':

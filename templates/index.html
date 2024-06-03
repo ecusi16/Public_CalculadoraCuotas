@@ -67,15 +67,15 @@
                 <form method="post">
                     <div class="mb-3">
                         <label for="monto" class="form-label">Monto del préstamo</label>
-                        <input type="number" id="monto" name="monto" class="form-control" step="1" required>
+                        <input type="number" id="monto" name="monto" class="form-control" step="1" value="{{ monto or '' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="plazo" class="form-label">Plazo en meses</label>
-                        <input type="number" id="plazo" name="plazo" class="form-control" step="1" required>
+                        <input type="number" id="plazo" name="plazo" class="form-control" step="1" value="{{ plazo or '' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="aporte_inicial" class="form-label">Aporte inicial</label>
-                        <input type="number" id="aporte_inicial" name="aporte_inicial" class="form-control" step="1" required>
+                        <input type="number" id="aporte_inicial" name="aporte_inicial" class="form-control" step="1" value="{{ aporte_inicial or '' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="tasa_interes" class="form-label">Tasa de interés anual (%)</label>
