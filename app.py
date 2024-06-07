@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, Blueprint, flash
 from calculadora_cuotas import obtener_cuota_mensual_total
+from datetime import datetime
 
 main = Blueprint('main', __name__)
 
@@ -12,6 +13,9 @@ def index():
     monto = None
     plazo = None
     aporte_inicial = None
+    
+    # Obtener la fecha actual
+    fecha_calculo = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if request.method == 'POST':
         try:
             monto = float(request.form['monto'])
@@ -31,7 +35,8 @@ def index():
             
             return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles, \
                             tasa_interes=tasa_interes, monto=monto, \
-                            plazo=plazo, aporte_inicial=aporte_inicial)
+                            plazo=plazo, aporte_inicial=aporte_inicial,
+                            fecha_calculo=fecha_calculo)
         except ValueError as e:
             error_message = str(e)
         except Exception as e:
@@ -42,7 +47,8 @@ def index():
     return render_template('index.html', cuota_mensual=cuota_mensual, \
                            detalles=detalles, \
                            tasa_interes=tasa_interes, monto=monto, \
-                           plazo=plazo, aporte_inicial=aporte_inicial)
+                           plazo=plazo, aporte_inicial=aporte_inicial,
+                           fecha_calculo=fecha_calculo)
 
 
 def create_app():
