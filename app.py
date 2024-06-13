@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Blueprint, flash, make_response
+from flask import Flask, render_template, request, Blueprint, flash, make_response, session
 from calculadora_cuotas import obtener_cuota_mensual_total
 from datetime import datetime
 import pdfkit
@@ -10,21 +10,24 @@ def index():
     error_message = None
     cuota_mensual = None
     detalles = None
-    tasa_interes = 16  # Tasa de interés predeterminada
-    monto = None
-    plazo = None
-    aporte_inicial = None
+    tasa_interes = 18  # Tasa de interés predeterminada
+    monto = session.get('monto')
+    plazo = session.get('plazo')
+    aporte_inicial_percent = session.get('aporte_inicial')
+    cuota_balon = session.get('cuota_balon')
     
     # Obtener la fecha actual
     fecha_calculo = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if request.method == 'POST':
         try:
-            monto = float(request.form['monto'])
+            monto = float(request.form['monto'].replace(',', ''))
             plazo = int(request.form['plazo'])
-            aporte_inicial = float(request.form['aporte_inicial'])
+            aporte_inicial_percent = float(request.form['aporte_inicial'])
+            aporte_inicial = monto * (aporte_inicial_percent / 100)
+            cuota_balon = request.form.get('cuota_balon', 'NO') == 'SI'
 
-            if plazo % 6 != 0:
-                raise ValueError("El plazo solo puede tomar valores que sean divisibles entre 6")
+            if plazo not in [6, 12, 24, 36, 48, 60]:
+                raise ValueError("El plazo solo puede tomar valores de 6, 12, 24, 36, 48 o 60 meses")
 
             if monto<=aporte_inicial:
                 raise ValueError("La cuota inicial no puede ser igual o mayor al monto del préstamo")
@@ -32,15 +35,25 @@ def index():
             if monto<=0 or plazo<=0 or aporte_inicial<0:
                 raise ValueError("Las entradas deben tomar valores positivos")
 
-            cuota_mensual, detalles = obtener_cuota_mensual_total(monto, plazo, aporte_inicial=aporte_inicial)
+            cuota_mensual, detalles = obtener_cuota_mensual_total(monto, plazo, \
+                                    aplica_cuota_balon=cuota_balon, aporte_inicial=aporte_inicial, \
+                                    aporte_inicial_porcentaje=aporte_inicial_percent)
+            
+            # Guardar los valores en la sesión
+            session['monto'] = monto
+            session['plazo'] = plazo
+            session['aporte_inicial'] = aporte_inicial_percent
+            session['cuota_balon'] = cuota_balon
             
             return render_template('index.html', cuota_mensual=cuota_mensual, detalles=detalles, \
                             tasa_interes=tasa_interes, monto=monto, \
-                            plazo=plazo, aporte_inicial=aporte_inicial,
+                            plazo=plazo, aporte_inicial=aporte_inicial_percent,\
+                            cuota_balon=cuota_balon,\
                             fecha_calculo=fecha_calculo)
         except ValueError as e:
             error_message = str(e)
         except Exception as e:
+            print(e)
             error_message = "Ocurrió un error inesperado. Por favor, verifica tus entradas y vuelve a intentarlo."
 
         flash(error_message, 'danger')
@@ -48,7 +61,8 @@ def index():
     return render_template('index.html', cuota_mensual=cuota_mensual, \
                            detalles=detalles, \
                            tasa_interes=tasa_interes, monto=monto, \
-                           plazo=plazo, aporte_inicial=aporte_inicial,
+                           plazo=plazo, aporte_inicial=aporte_inicial_percent,\
+                           cuota_balon=cuota_balon,\
                            fecha_calculo=fecha_calculo)
 
 @main.route('/generate_pdf', methods=['POST'])
