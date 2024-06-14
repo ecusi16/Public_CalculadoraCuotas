@@ -139,9 +139,20 @@
                         <label for="monto" class="form-label">Monto del préstamo</label>
                         <input type="text" id="monto" name="monto" class="form-control" step="1" value="{{ monto or '' }}" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="aporte_inicial" class="form-label">Aporte inicial (%)</label>
-                        <input type="number" id="aporte_inicial" name="aporte_inicial" class="form-control" step="1" value="{{ aporte_inicial or '' }}" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="aporte_select" class="form-label">Aporte inicial (%)</label>
+                            <select id="aporte_select" name="aporte_select" class="form-control" required>
+                                <option value="0" {% if aporte_inicial == 0 %}selected{% endif %}>0%</option>
+                                <option value="10" {% if aporte_inicial == 10 %}selected{% endif %}>10%</option>
+                                <option value="20" {% if aporte_inicial == 20 %}selected{% endif %}>20%</option>
+                                <option value="custom" {% if aporte_inicial is not none and aporte_inicial not in [0, 10, 20] %}selected{% endif %}>Personalizado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="aporte_inicial" class="form-label" id="aporte_personalizado_label">Aporte inicial personalizado</label>
+                            <input type="number" id="aporte_inicial" name="aporte_inicial" class="form-control" step="1" value="{{ aporte_inicial or '' }}" placeholder="Ingrese el aporte inicial" disabled>
+                        </div>    
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -280,6 +291,23 @@
             montoInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/[^0-9.]/g, '');
                 e.target.value = value;
+            });
+
+            const aporteSelect = document.getElementById('aporte_select');
+            const aporteInput = document.getElementById('aporte_inicial');
+            const aporteLabel = document.getElementById('aporte_personalizado_label');
+
+            aporteSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    aporteInput.disabled = false;
+                    aporteInput.value = '';
+                    aporteInput.focus();
+                    aporteLabel.classList.remove('hidden');
+                } else {
+                    aporteInput.disabled = true;
+                    aporteInput.value = this.value;
+                    aporteLabel.classList.add('hidden');
+                }
             });
         });
 

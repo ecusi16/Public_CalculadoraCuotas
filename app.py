@@ -22,7 +22,11 @@ def index():
         try:
             monto = float(request.form['monto'].replace(',', ''))
             plazo = int(request.form['plazo'])
-            aporte_inicial_percent = float(request.form['aporte_inicial'])
+            aporte_select = request.form['aporte_select']
+            if aporte_select == 'custom':
+                aporte_inicial_percent = float(request.form['aporte_inicial'])
+            else:
+                aporte_inicial_percent = float(aporte_select)
             aporte_inicial = monto * (aporte_inicial_percent / 100)
             cuota_balon = request.form.get('cuota_balon', 'NO') == 'SI'
 
